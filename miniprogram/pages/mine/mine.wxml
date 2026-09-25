@@ -24,9 +24,9 @@
     <view class="list-item cell" bindtap="goCalendar">
       <text class="cell-icon">📅</text><view class="flex1">全年活动安排</view><text class="cell-arrow">›</text>
     </view>
-    <!-- 测试管理员入口：仅在上线前测试阶段显示（云端关闭后自动隐藏，见 app.js selfGrantEnabled） -->
-    <view class="list-item cell" wx:if="{{selfGrantEnabled}}" bindtap="goAdmin">
-      <text class="cell-icon">🛠</text><view class="flex1">测试管理员功能</view><text class="cell-arrow">›</text>
+    <!-- 管理后台入口：已是管理员时始终显示；尚未成为管理员时，仅在测试开关开启（selfGrantEnabled）时显示 -->
+    <view class="list-item cell" wx:if="{{isAdmin || selfGrantEnabled}}" bindtap="goAdmin">
+      <text class="cell-icon">🛠</text><view class="flex1">{{isAdmin ? '管理后台' : '测试管理员功能'}}</view><text class="cell-arrow">›</text>
     </view>
     <view class="list-item cell" catchtap="showService">
       <text class="cell-icon">🎧</text><view class="flex1">联系客服</view><text class="cell-arrow">›</text>

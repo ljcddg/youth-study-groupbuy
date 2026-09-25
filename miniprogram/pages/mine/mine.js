@@ -203,8 +203,14 @@ Page({
   goMyGroups() { wx.navigateTo({ url: '/pages/mygroups/mygroups' }); },
   goCalendar() { wx.navigateTo({ url: '/pages/calendar/calendar' }); },
 
-  // 测试管理员功能：先把当前微信设为管理员，再进入管理端
+  // 管理端入口。区分两种情况：
+  // 1) 已是管理员 → 直接进管理端（上线后的正常路径，不依赖任何测试开关）
+  // 2) 还不是管理员 → 走测试期的自助授权（需云端 ALLOW_SELF_GRANT=1），授权后再进
   goAdmin() {
+    if (app.isAdmin()) {
+      wx.navigateTo({ url: '/pages/admin/index/index' });
+      return;
+    }
     loading('设为管理员');
     api('selfGrantAdmin')
       .then(() => {
