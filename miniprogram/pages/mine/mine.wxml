@@ -1,0 +1,82 @@
+<!-- 我的 -->
+<view class="page">
+
+  <view class="me-head">
+    <image class="me-avatar" wx:if="{{profile.avatarUrl || profile.avatarFileID}}" src="{{profile.avatarUrl || profile.avatarFileID}}" mode="aspectFill" />
+    <view class="me-avatar" wx:else>👦</view>
+    <view class="flex1">
+      <view class="me-name">{{profile.name || '能量少年研学 · 成员'}}</view>
+      <view class="mt8"><text class="st {{roleClass}}">{{roleLabel}}</text></view>
+    </view>
+    <view class="edit-link" bindtap="openProfile">编辑资料 ›</view>
+  </view>
+
+  <view class="list first-card">
+    <view class="list-item cell" bindtap="openProfile">
+      <text class="cell-icon">👤</text><view class="flex1">个人资料</view><text class="t-sub">{{profile.name ? profile.name + (profile.phone ? ' · ' + profile.phone : '') : '未填写'}}</text><text class="cell-arrow">›</text>
+    </view>
+    <view class="list-item cell" bindtap="goJoins">
+      <text class="cell-icon">🗂</text><view class="flex1">我的参与</view><text class="cell-arrow">›</text>
+    </view>
+    <view class="list-item cell" bindtap="goMyGroups">
+      <text class="cell-icon">📋</text><view class="flex1">我的拼团（团长）</view><text class="cell-arrow">›</text>
+    </view>
+    <view class="list-item cell" bindtap="goCalendar">
+      <text class="cell-icon">📅</text><view class="flex1">全年活动安排</view><text class="cell-arrow">›</text>
+    </view>
+    <!-- 测试管理员入口：仅在上线前测试阶段显示（云端关闭后自动隐藏，见 app.js selfGrantEnabled） -->
+    <view class="list-item cell" wx:if="{{selfGrantEnabled}}" bindtap="goAdmin">
+      <text class="cell-icon">🛠</text><view class="flex1">测试管理员功能</view><text class="cell-arrow">›</text>
+    </view>
+    <view class="list-item cell" catchtap="showService">
+      <text class="cell-icon">🎧</text><view class="flex1">联系客服</view><text class="cell-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- openid：低调一行，点击复制 -->
+  <view class="oid-line" bindtap="copyOpenid">
+    <text class="oid-label">ID</text>
+    <text class="oid-val" selectable="{{true}}">{{openid || '获取中…'}}</text>
+  </view>
+
+  <!-- 个人资料编辑弹窗 -->
+  <view class="mask" wx:if="{{profileShow}}" bindtap="closeProfile">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">编辑个人资料</view>
+      <view class="avatar-row">
+        <image class="avatar-big" wx:if="{{profile.avatarUrl || profile.avatarFileID}}" src="{{profile.avatarUrl || profile.avatarFileID}}" mode="aspectFill" />
+        <view class="avatar-big avatar-ph" wx:else>👦</view>
+        <view class="flex1">
+          <button class="btn-ghost btn-sm" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar" disabled="{{avatarUploading}}">{{avatarUploading ? '上传中…' : '使用微信头像'}}</button>
+          <view class="t-hint mt8">一键选用你的微信头像，也可以不传</view>
+        </view>
+      </view>
+
+      <view class="form-item mt16">
+        <view class="form-label form-label-req">姓名</view>
+        <input class="form-input" type="nickname" placeholder="点击可一键填入微信昵称" placeholder-class="form-ph" value="{{profileForm.name}}" data-field="name" bindinput="onProfileInput" />
+      </view>
+      <view class="form-item">
+        <view class="form-label form-label-req">手机号</view>
+        <input class="form-input" type="number" maxlength="11" placeholder="报名时自动带出" placeholder-class="form-ph" value="{{profileForm.phone}}" data-field="phone" bindinput="onProfileInput" />
+      </view>
+      <view class="t-hint mt16">填写后，报名拼团、申请成团时会自动带入姓名和手机号，无需重复填写。</view>
+
+      <view class="pop-ft">
+        <button class="btn-gray" bindtap="closeProfile">取消</button>
+        <button class="btn-main" bindtap="saveProfile" disabled="{{saving}}">{{saving ? '保存中…' : '保存'}}</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 客服弹窗 -->
+  <view class="mask" wx:if="{{serviceShow}}" bindtap="hideService">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">联系客服</view>
+      <view class="t-sub" style="text-align:center">{{contactTip || '扫码添加客服微信咨询'}}</view>
+      <image class="qr-img mt24" src="/images/service_qr.jpg" mode="aspectFit" show-menu-by-longpress style="margin:0 auto;display:block" />
+      <view class="t-hint" style="text-align:center;margin-top:16rpx">长按二维码识别添加</view>
+      <view class="pop-ft"><button class="btn-main" bindtap="hideService">关闭</button></view>
+    </view>
+  </view>
+</view>

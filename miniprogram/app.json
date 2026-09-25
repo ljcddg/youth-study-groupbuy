@@ -1,0 +1,28 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/mine/mine",
+    "pages/hall/hall",
+    "pages/apply/apply",
+    "pages/group/group",
+    "pages/pay/pay",
+    "pages/joins/joins",
+    "pages/mygroups/mygroups",
+    "pages/calendar/calendar",
+    "pages/admin/index/index",
+    "pages/admin/applications/applications",
+    "pages/admin/groups/groups",
+    "pages/admin/settings/settings",
+    "pages/admin/blacklist/blacklist"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#23262B",
+    "navigationBarTitleText": "能量少年研学",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F6F8F5",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

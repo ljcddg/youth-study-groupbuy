@@ -1,0 +1,118 @@
+<!-- 管理端 · 设置 -->
+<view class="page">
+
+  <view class="tabs">
+    <view class="tab {{tab === item.key ? 'tab-on' : ''}}" wx:for="{{tabs}}" wx:key="key" bindtap="switchTab" data-key="{{item.key}}">{{item.label}}</view>
+  </view>
+
+  <!-- ============ 业务规则 ============ -->
+  <block wx:if="{{tab === 'biz'}}">
+    <view class="card first-card">
+      <view class="card-title">业务规则</view>
+      <view class="t-sub">这些参数会影响成团申请、拼团统计与页面提示。</view>
+      <view class="divider"></view>
+
+      <view class="form-item mt16">
+        <view class="form-label">最低成团人数</view>
+        <input class="form-input" type="number" value="{{biz.minMembers}}" data-field="minMembers" bindinput="onBizInput" />
+      </view>
+      <view class="form-tip">0 表示不限制。仅作为提示信息展示，不阻止成员参与。</view>
+
+      <view class="form-item mt16">
+        <view class="form-label">限时抢购截止</view>
+        <view style="display:flex;gap:16rpx;align-items:center">
+          <picker mode="date" value="{{saleDate}}" bindchange="onSaleDate">
+            <view class="form-input" style="min-width:240rpx;text-align:center">{{saleDate || '选择日期'}}</view>
+          </picker>
+          <picker mode="time" value="{{saleTime}}" bindchange="onSaleTime">
+            <view class="form-input" style="min-width:140rpx;text-align:center">{{saleTime || '时间'}}</view>
+          </picker>
+          <text class="t-hint" wx:if="{{saleDate}}" bindtap="clearSaleEnd">清除</text>
+        </view>
+      </view>
+      <view class="form-tip">设置后首页顶部展示限时抢购倒计时；留空表示不展示。</view>
+
+      <view class="form-col mt16">
+        <view class="form-label" style="width:auto">联系管理员提示</view>
+        <textarea class="form-textarea" placeholder="选填，例如：有问题请加管理员微信 138xxxx" placeholder-class="form-ph" value="{{biz.contactAdminTip}}" data-field="contactAdminTip" bindinput="onBizInput" maxlength="300" />
+      </view>
+
+      <button class="btn-main mt24" bindtap="saveBiz">保存业务规则</button>
+    </view>
+
+  </block>
+
+  <!-- ============ 管理员 ============ -->
+  <block wx:if="{{tab === 'admin'}}">
+    <view class="card first-card">
+      <view class="card-title">我的 openid</view>
+      <view class="t-sub">把这段发给已经接入的管理员，他就能把你加进管理员名单。</view>
+      <view class="openid-box mt16" bindtap="copyText" data-text="{{myOpenid}}">{{myOpenid}}</view>
+      <button class="btn-ghost mt16" bindtap="copyText" data-text="{{myOpenid}}">复制 openid</button>
+    </view>
+
+    <view class="card">
+      <view class="row-between">
+        <view class="card-title" style="margin-bottom:0">管理员名单（{{admins.length}}）</view>
+        <view class="t-hint" wx:if="{{isSuper}}" bindtap="openUsers">从用户中选 ›</view>
+      </view>
+      <view class="empty" wx:if="{{!admins.length}}"><view class="empty-text">暂无管理员</view></view>
+      <view class="a-row" wx:for="{{admins}}" wx:key="_id">
+        <view class="row-between">
+          <view class="flex1">
+            <view class="t-strong">{{item.name}}
+              <text class="tag {{item.role === 'superadmin' ? 'tag-blue' : 'tag-green'}}" style="margin-left:12rpx">{{item.roleLabel}}</text>
+              <text class="tag tag-gray" wx:if="{{item.isMe}}">我</text>
+            </view>
+            <view class="li-sub mono">{{item.openid}}</view>
+            <view class="li-sub">添加于 {{item.createdAtText}}</view>
+          </view>
+          <view class="st {{item.enabled ? 'st-confirmed' : 'st-closed'}}">{{item.enabled ? '启用' : '停用'}}</view>
+        </view>
+        <view class="btn-row mt16">
+          <button class="btn-ghost btn-sm" wx:if="{{isSuper}}" bindtap="toggleAdmin" data-id="{{item._id}}" data-enabled="{{item.enabled}}">{{item.enabled ? '停用' : '启用'}}</button>
+          <button class="btn-danger btn-sm" wx:if="{{isSuper && !item.isMe}}" bindtap="removeAdmin" data-id="{{item._id}}">删除</button>
+        </view>
+      </view>
+      <button class="btn-main mt24" wx:if="{{isSuper}}" bindtap="openAdd">手动添加管理员</button>
+      <view class="t-hint mt16">仅超级管理员可添加、停用、删除管理员；普通管理员只能查看名单。</view>
+    </view>
+  </block>
+
+  <!-- 添加管理员弹窗 -->
+  <view class="mask" wx:if="{{addShow}}" bindtap="closeAdd">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">添加管理员</view>
+      <view class="form-item">
+        <view class="form-label form-label-req">openid</view>
+        <input class="form-input" placeholder="对方的 openid" placeholder-class="form-ph" value="{{addForm.openid}}" data-field="openid" bindinput="onAddInput" />
+      </view>
+      <view class="form-item">
+        <view class="form-label">备注姓名</view>
+        <input class="form-input" placeholder="例如：王老师" placeholder-class="form-ph" value="{{addForm.name}}" data-field="name" bindinput="onAddInput" />
+      </view>
+      <view class="t-hint mt16">对方在小程序首页可以查看并复制自己的 openid。</view>
+      <view class="pop-ft">
+        <button class="btn-gray" bindtap="closeAdd">取消</button>
+        <button class="btn-main" bindtap="submitAdd" disabled="{{addSubmitting}}">{{addSubmitting ? '添加中…' : '确认添加'}}</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 用户列表弹窗 -->
+  <view class="mask" wx:if="{{usersShow}}" bindtap="closeUsers">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">从用户中选管理员</view>
+      <view class="empty" wx:if="{{!users.length}}"><view class="empty-text">暂无用户记录\n让对方先打开一次小程序</view></view>
+      <view class="u-row" wx:for="{{users}}" wx:key="_id" bindtap="pickUser" data-openid="{{item.openid}}">
+        <view class="flex1">
+          <view class="t-strong">{{item.nickname || '微信用户'}}</view>
+          <view class="li-sub mono ellipsis">{{item.openid}}</view>
+          <view class="li-sub">{{item.lastLoginText}}</view>
+        </view>
+        <text class="arrow-r">›</text>
+      </view>
+      <view class="pop-ft"><button class="btn-gray" bindtap="closeUsers">关闭</button></view>
+    </view>
+  </view>
+</view>

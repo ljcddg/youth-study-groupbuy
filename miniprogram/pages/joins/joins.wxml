@@ -1,0 +1,44 @@
+<!-- 我的参与 -->
+<view class="page">
+
+  <view class="tabs">
+    <view class="tab {{tab === item.key ? 'tab-on' : ''}}" wx:for="{{tabs}}" wx:key="key" bindtap="switchTab" data-key="{{item.key}}">
+      {{item.label}}<text class="tab-num" wx:if="{{counts[item.key]}}">{{counts[item.key]}}</text>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && !list.length}}">
+    <view class="empty-icon">🗂</view>
+    <view class="empty-text">暂无记录\n从团长分享的链接参与，或由团长/管理员代录后自动关联</view>
+  </view>
+
+  <view class="list">
+    <view class="list-item" wx:for="{{list}}" wx:key="_id">
+      <view class="row-between" bindtap="goGroup" data-id="{{item.groupId}}">
+        <view class="flex1">
+          <view class="li-title ellipsis">{{item.groupName || '拼团'}}</view>
+          <view class="li-sub">{{item.planName}} · 应付 ¥{{item.amountText}} · {{item.sourceLabel}}</view>
+          <view class="li-sub">参与时间 {{item.createdAtText}}</view>
+        </view>
+        <view class="li-right">
+          <view class="st {{item.payStatusClass}}">{{item.payStatusLabel}}</view>
+        </view>
+      </view>
+
+      <view class="danger-box mt16" wx:if="{{item.payStatus === 'rejected'}}">驳回原因：{{item.rejectReason || '凭证不清晰'}}</view>
+
+      <view class="btn-row mt24" wx:if="{{item.payStatus === 'unpaid' || item.payStatus === 'rejected'}}">
+        <button class="btn-main btn-sm" bindtap="goPay" data-id="{{item._id}}">{{item.payStatus === 'unpaid' ? '去付款' : '重新支付'}}</button>
+        <button class="btn-gray btn-sm" bindtap="cancelJoin" data-id="{{item._id}}">取消参与</button>
+      </view>
+      <view class="btn-row mt24" wx:if="{{item.payStatus === 'pending'}}">
+        <button class="btn-ghost btn-sm" bindtap="goPay" data-id="{{item._id}}">查看凭证</button>
+        <button class="btn-gray btn-sm" bindtap="goGroup" data-id="{{item.groupId}}">查看拼团</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="t-hint" style="text-align:center;padding:20rpx 40rpx">
+    付款由管理员统一收款并人工核实，系统不做自动分账
+  </view>
+</view>

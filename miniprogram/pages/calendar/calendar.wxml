@@ -1,0 +1,25 @@
+<!-- 全年 48 场活动安排表 -->
+<view class="page">
+  <view class="head-note card">
+    <view class="note-main">全年 48 场 · 每周六开展 · 场地基本不重复</view>
+    <view class="note-sub">每周二发布当期活动，家长即可报名，周五最终统计，周六落地执行。</view>
+    <view class="note-sub">每场为半天或全天活动，是否供餐、集合时间地点以当期发布为准；若报名不足 10 组家庭或遇恶劣天气，活动将顺延组织。</view>
+  </view>
+
+  <view class="month-list">
+    <view class="month-card" id="m{{index}}" wx:for="{{months}}" wx:key="month">
+      <view class="month-head" bindtap="toggleMonth" data-idx="{{index}}">
+        <text class="month-name">{{item.month}}</text>
+        <text class="month-tag" wx:if="{{curIdx === index}}">本月</text>
+        <text class="month-count">{{item.activities.length}} 场</text>
+        <text class="arrow {{expandedMonth === index ? 'up' : ''}}">▾</text>
+      </view>
+      <view class="act-list" wx:if="{{expandedMonth === index}}">
+        <view class="act-item" wx:for="{{item.activities}}" wx:for-item="act" wx:key="*this">
+          <text class="act-dot">•</text>
+          <text class="act-name">{{act}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

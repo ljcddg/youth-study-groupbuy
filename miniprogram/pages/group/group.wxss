@@ -1,0 +1,58 @@
+/* 拼团详情 */
+.head-card { padding-top: 36rpx; }
+.g-name { font-size: 40rpx; font-weight: 700; line-height: 1.4; }
+.g-leader { font-size: 32rpx; font-weight: 600; margin-top: 6rpx; }
+
+/* 已报名名单 */
+.joiner-list { }
+.joiner-item {
+  display: flex;
+  align-items: center;
+  padding: 18rpx 0;
+  border-top: 1rpx solid var(--line);
+}
+.joiner-item:first-child { border-top: none; }
+.joiner-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #E4F4EC;
+  color: var(--main-deep);
+  font-size: 28rpx;
+  font-weight: 600;
+  text-align: center;
+  line-height: 64rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+.joiner-name { font-size: 28rpx; font-weight: 600; }
+.joiner-me { font-size: 22rpx; color: var(--main-deep); font-weight: 400; }
+.joiner-sub { font-size: 22rpx; color: var(--text-sub); margin-top: 4rpx; }
+
+.progress-wrap { }
+.progress-bar {
+  height: 14rpx;
+  background: #EDF2EE;
+  border-radius: 10rpx;
+  overflow: hidden;
+  margin-top: 12rpx;
+}
+.progress-in { height: 100%; background: linear-gradient(90deg, var(--main), var(--main-deep)); border-radius: 10rpx; }
+
+.mine-item { padding: 20rpx 0; border-top: 1rpx solid var(--line); }
+.mine-item:first-of-type { border-top: none; }
+
+.m-row { display: flex; align-items: center; padding: 24rpx 0; border-top: 1rpx solid var(--line); }
+.m-row:first-of-type { border-top: none; }
+
+.d-row { padding: 20rpx 0; border-top: 1rpx solid var(--line); }
+.d-row:first-of-type { border-top: none; }
+
+.voucher-img { width: 100%; border-radius: 16rpx; background: #F5F5F5; }
+
+.plan-price { text-align: right; }
+.plan-price-item { display: flex; align-items: baseline; justify-content: flex-end; margin-top: 6rpx; }
+.plan-price-item .t-sub { margin-right: 12rpx; }
+.plan-list { margin-top: 8rpx; }
+.plan-item { border: 2rpx solid #E8E5DD; border-radius: 16rpx; padding: 20rpx 24rpx; margin-top: 16rpx; }
+.plan-item.on { border-color: var(--main); background: #F2FAF6; }

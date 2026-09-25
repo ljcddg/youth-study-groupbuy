@@ -1,0 +1,166 @@
+<!-- 管理端 · 拼团管理 -->
+<view class="page">
+
+  <!-- ============ 列表 ============ -->
+  <block wx:if="{{mode === 'list'}}">
+    <view class="tabs">
+      <view class="tab {{tab === item.key ? 'tab-on' : ''}}" wx:for="{{tabs}}" wx:key="key" bindtap="switchTab" data-key="{{item.key}}">{{item.label}}</view>
+    </view>
+
+    <view class="search-row">
+      <input class="search-input" placeholder="搜索拼团名称 / 团长 / 编号" placeholder-class="form-ph" value="{{keyword}}" bindinput="onKeyword" bindconfirm="doSearch" confirm-type="search" />
+      <text class="search-btn" bindtap="doSearch">搜索</text>
+      <text class="search-clear" wx:if="{{keyword}}" bindtap="clearSearch">清空</text>
+    </view>
+
+    <view class="date-filter">
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDate">
+        <view class="date-box">{{startDate || '开始日期'}}</view>
+      </picker>
+      <text class="date-sep">至</text>
+      <picker mode="date" value="{{endDate}}" bindchange="onEndDate">
+        <view class="date-box">{{endDate || '结束日期'}}</view>
+      </picker>
+      <text class="search-clear" wx:if="{{startDate || endDate}}" bindtap="clearDate">清除</text>
+    </view>
+
+    <view class="empty" wx:if="{{!loading && !list.length}}">
+      <view class="empty-icon">📋</view>
+      <view class="empty-text">暂无拼团\n用户提交成团申请并通过审核后，这里会出现拼团</view>
+    </view>
+
+    <view class="card" wx:for="{{list}}" wx:key="_id" bindtap="openDetail" data-id="{{item._id}}">
+      <view class="row-top">
+        <view class="flex1">
+          <view class="li-title ellipsis">{{item.name}}</view>
+          <view class="li-sub">{{item.groupNo}} · 团长 {{item.leaderName}}</view>
+          <view class="li-sub">创建于 {{item.createdAtText}}</view>
+        </view>
+        <view class="st {{item.statusClass}}">{{item.statusLabel}}</view>
+      </view>
+
+      <view class="divider"></view>
+
+      <view class="stat-grid">
+        <view class="stat"><view class="stat-num">{{item.joinedCount}}</view><view class="stat-label">参与</view></view>
+        <view class="stat"><view class="stat-num">{{item.confirmedCount}}</view><view class="stat-label">已确认</view></view>
+        <view class="stat"><view class="stat-num">{{item.pendingCount}}</view><view class="stat-label">待确认</view></view>
+        <view class="stat"><view class="stat-num stat-num-red">{{item.confirmedAmountText}}</view><view class="stat-label">已收款(元)</view></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- ============ 单团台账 ============ -->
+  <block wx:if="{{mode === 'detail' && group}}">
+
+    <view class="card first-card">
+      <view class="row-between">
+        <view class="flex1">
+          <view class="li-title">{{group.name}}</view>
+          <view class="li-sub">{{group.groupNo}} · 团长 {{group.leaderName}}</view>
+        </view>
+        <view class="st {{group.statusClass}}">{{group.statusLabel}}</view>
+      </view>
+      <view class="divider"></view>
+      <view class="stat-grid">
+        <view class="stat"><view class="stat-num">{{stats.joinedCount}}</view><view class="stat-label">参与人数</view></view>
+        <view class="stat"><view class="stat-num">{{stats.confirmedCount}}</view><view class="stat-label">已确认人数</view></view>
+        <view class="stat"><view class="stat-num">{{stats.pendingCount}}</view><view class="stat-label">待确认</view></view>
+        <view class="stat"><view class="stat-num">{{stats.unpaidCount}}</view><view class="stat-label">未付款</view></view>
+        <view class="stat"><view class="stat-num">{{stats.rejectedCount}}</view><view class="stat-label">已驳回</view></view>
+        <view class="stat"><view class="stat-num">{{stats.cancelledCount}}</view><view class="stat-label">已取消</view></view>
+      </view>
+      <view class="divider"></view>
+      <view class="form-item"><view class="form-label">已确认收款总额</view><view class="flex1 money" style="text-align:right">¥{{stats.confirmedAmountText}}</view></view>
+    </view>
+
+    <!-- 操作 -->
+    <view class="card">
+      <view class="card-title">操作</view>
+      <view class="btn-row">
+        <button class="btn-ghost btn-sm" bindtap="openAdd">代录成员</button>
+      </view>
+      <view class="btn-row mt16">
+        <button class="btn-gray btn-sm" wx:if="{{group.status === 'ongoing'}}" bindtap="closeGroup">关闭拼团</button>
+        <button class="btn-ghost btn-sm" wx:if="{{group.status === 'closed'}}" bindtap="reopenGroup">重新开启</button>
+      </view>
+    </view>
+
+    <!-- 成员台账 -->
+    <view class="card">
+      <view class="row-between">
+        <view class="card-title" style="margin-bottom:0">已支付成员（{{members.length}}）</view>
+      </view>
+      <view class="t-hint mt8">记录成员来源（谁带来的）、参与时间与付款状态</view>
+
+      <view class="empty" wx:if="{{!members.length}}">
+        <view class="empty-text">还没有成员参与</view>
+      </view>
+
+      <view class="m-block" wx:for="{{members}}" wx:key="_id">
+        <view class="row-top">
+          <view class="flex1">
+            <view class="row">
+              <text class="t-strong">{{item.name}}</text>
+              <text class="t-sub" style="margin-left:12rpx" bindtap="callPhone" data-phone="{{item.phone}}">{{item.phone}}</text>
+            </view>
+            <view class="li-sub">{{item.sourceLabel}} · {{item.createdAtText}}</view>
+            <view class="li-sub" wx:if="{{item.remark}}">备注：{{item.remark}}</view>
+          </view>
+          <view class="li-right">
+            <view class="st {{item.payStatusClass}}">{{item.payStatusLabel}}</view>
+            <view class="t-sub mt8">{{item.planName}} ¥{{item.amountText}}</view>
+          </view>
+        </view>
+
+        <view class="danger-box mt16" wx:if="{{item.payStatus === 'rejected'}}">驳回原因：{{item.rejectReason}}</view>
+
+        <view class="btn-row mt16">
+          <button class="btn-gray btn-sm" wx:if="{{item.payStatus === 'unpaid' || item.payStatus === 'rejected'}}" bindtap="cancelMember" data-id="{{item._id}}">作废</button>
+        </view>
+      </view>
+    </view>
+
+    <view class="card">
+      <button class="btn-ghost" bindtap="backList">返回拼团列表</button>
+    </view>
+  </block>
+
+  <!-- ============ 代录成员弹窗 ============ -->
+  <view class="mask" wx:if="{{addShow}}" bindtap="closeAdd">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">代录成员</view>
+      <view class="t-hint" style="text-align:center">用于线下报名、电话报名的补录</view>
+      <view class="form-item">
+        <view class="form-label form-label-req">姓名</view>
+        <input class="form-input" placeholder="成员姓名" placeholder-class="form-ph" value="{{addForm.name}}" data-field="name" bindinput="onAddInput" />
+      </view>
+      <view class="form-item">
+        <view class="form-label form-label-req">手机号</view>
+        <input class="form-input" type="number" maxlength="11" placeholder="联系电话" placeholder-class="form-ph" value="{{addForm.phone}}" data-field="phone" bindinput="onAddInput" />
+      </view>
+      <view class="form-col">
+        <view class="form-label form-label-req" style="width:auto">选择套餐</view>
+        <view class="plan-list">
+          <view class="plan-item {{addForm.planKey === item.key ? 'on' : ''}}" wx:for="{{plans}}" wx:key="key" data-key="{{item.key}}" bindtap="choosePlan">
+            <view class="row-between">
+              <view>
+                <text class="t-strong">{{item.name}}</text>
+                <text class="t-sub" style="margin-left:12rpx">{{item.title}}</text>
+              </view>
+              <text class="price-num">¥{{item.price}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="form-col">
+        <view class="form-label" style="width:auto">来源说明</view>
+        <input class="form-input-left mt8" placeholder="选填，例如：团长线下拉入" placeholder-class="form-ph" value="{{addForm.sourceLabel}}" data-field="sourceLabel" bindinput="onAddInput" />
+      </view>
+      <view class="pop-ft">
+        <button class="btn-gray" bindtap="closeAdd">取消</button>
+        <button class="btn-main" bindtap="submitAdd" disabled="{{addSubmitting}}">{{addSubmitting ? '提交中…' : '确认录入'}}</button>
+      </view>
+    </view>
+  </view>
+</view>

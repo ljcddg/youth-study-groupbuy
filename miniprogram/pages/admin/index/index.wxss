@@ -1,0 +1,18 @@
+/* 管理端工作台 */
+.dash-head { padding-top: 36rpx; }
+.dash-icon { font-size: 64rpx; margin-left: 20rpx; }
+
+.todo-grid { display: flex; gap: 20rpx; }
+.todo {
+  flex: 1;
+  border-radius: 16rpx;
+  padding: 28rpx 20rpx;
+  text-align: center;
+  background: #F2F6F2;
+}
+.todo-warn { background: #FDF3E3; }
+.todo-num { font-size: 52rpx; font-weight: 700; color: #B2762A; line-height: 1.2; }
+.todo-label { font-size: 24rpx; color: #8A928C; margin-top: 8rpx; }
+
+.menu-icon { font-size: 44rpx; margin-right: 20rpx; }
+.arrow-r { font-size: 38rpx; color: #C4CAC6; margin-left: 8rpx; }

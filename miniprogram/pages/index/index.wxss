@@ -1,0 +1,172 @@
+/* 首页：海报垂直长页 */
+
+/* 顶部品牌条（深色，参考图效果） */
+.topbar { background: #23262B; color: #fff; padding: 30rpx 32rpx; }
+.tb-name { font-size: 38rpx; font-weight: 700; letter-spacing: 2rpx; }
+.tb-sub { font-size: 22rpx; opacity: 0.72; margin-top: 10rpx; }
+
+/* 真实信息条：只用真实卖点（价格 / 场次 / 频次） */
+.fact-bar {
+  display: flex;
+  background: #fff;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #F0F2F0;
+}
+.fact { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4rpx; }
+.fact-num { font-size: 32rpx; font-weight: 700; color: #E8442E; }
+.fact-label { font-size: 20rpx; color: #8A928C; }
+
+/* 轮播：真实活动海报 */
+.banner-swiper {
+  width: 100%;
+  height: 440rpx;
+  background: #F2F3F2;
+}
+.banner-img { width: 100%; height: 100%; }
+
+/* 限时抢购倒计时条 */
+.flash-bar {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 18rpx 28rpx;
+  gap: 20rpx;
+  border-bottom: 1rpx solid #F0F2F0;
+}
+.flash-title { font-size: 30rpx; font-weight: 700; color: #E8442E; }
+.cd-row { display: flex; align-items: center; gap: 6rpx; margin-left: auto; }
+.cd-box {
+  min-width: 56rpx;
+  text-align: center;
+  background: #E8442E;
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: 700;
+  border-radius: 8rpx;
+  padding: 8rpx 8rpx;
+}
+.cd-unit, .cd-sep { font-size: 24rpx; color: #E8442E; font-weight: 700; }
+
+/* 浏览量 + 团数人数条（红底白字） */
+.stat-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #E8442E;
+  color: #fff;
+  padding: 16rpx 28rpx;
+}
+.ss-left, .ss-right { display: flex; align-items: center; gap: 8rpx; }
+.ss-num { font-size: 34rpx; font-weight: 700; }
+.ss-label { font-size: 24rpx; opacity: 0.95; }
+.ss-slash { font-size: 24rpx; opacity: 0.7; margin: 0 4rpx; }
+
+/* 头像墙 */
+.avatar-wall {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  background: #fff;
+  padding: 24rpx 28rpx;
+  border-bottom: 1rpx solid #F0F2F0;
+}
+.wall-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: #F2F4F2;
+}
+
+/* 最新订单记录 */
+.orders { background: #fff; padding: 8rpx 28rpx 16rpx; }
+.orders-title {
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--text);
+  padding: 20rpx 0 8rpx;
+}
+.order-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #F3F5F3;
+}
+.order-item:last-child { border-bottom: none; }
+.order-avatar {
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 50%;
+  background: #F2F4F2;
+  flex-shrink: 0;
+  margin-right: 20rpx;
+  text-align: center;
+  line-height: 84rpx;
+  font-size: 44rpx;
+}
+.order-mid { min-width: 0; }
+.order-name { font-size: 28rpx; font-weight: 500; color: var(--text); }
+.order-plan {
+  font-size: 20rpx;
+  color: #8A928C;
+  background: #F2F4F2;
+  border-radius: 16rpx;
+  padding: 2rpx 12rpx;
+  margin-left: 12rpx;
+  font-weight: 400;
+}
+.order-time { font-size: 22rpx; color: #A9B0AA; margin-top: 6rpx; }
+.order-pay { font-size: 26rpx; font-weight: 700; flex-shrink: 0; }
+.pay-ok { color: #E8442E; }
+.pay-wait { color: #E8A23C; }
+
+/* 海报垂直流：整宽、无卡片包裹、上下轻间隔 */
+.poster-flow { padding: 8rpx 0 0; }
+.poster-img {
+  width: 100%;
+  display: block;
+  margin-bottom: 8rpx;
+  background: #F2F3F2;
+  min-height: 200rpx;
+}
+
+/* 说明卡片 */
+.info-card { margin-top: 20rpx; }
+.idea-line { font-size: 28rpx; line-height: 2; color: var(--text); }
+
+.foot-tip { text-align: center; font-size: 22rpx; color: #B4BAB6; padding: 24rpx 40rpx 30rpx; }
+
+/* 底部操作栏：左侧 3 个小入口 + 右侧 2 个大按钮（参考图） */
+.bar-nav {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 12rpx;
+  gap: 8rpx;
+}
+.bar-item {
+  flex: none;
+  width: 104rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 20rpx;
+  color: #555;
+  line-height: 1.4;
+  height: 100rpx;
+}
+.bar-icon { font-size: 34rpx; margin-bottom: 2rpx; }
+
+.bar-cta {
+  flex: 1;
+  text-align: center;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 600;
+  border-radius: 44rpx;
+  padding: 22rpx 0;
+  line-height: 1.3;
+}
+.cta-join { background: #FF6B2C; }   /* 加入TA的团：橙红 */
+.cta-lead { background: #FFB600; }   /* 成为团长：黄 */

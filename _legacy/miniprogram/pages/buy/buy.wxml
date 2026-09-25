@@ -1,0 +1,50 @@
+<!-- 下单页 -->
+<view class="page">
+  <view class="card">
+    <view class="order-head">
+      <view class="order-title">{{title}}</view>
+      <view class="price"><text class="price-symbol">¥</text><text class="price-num">{{price}}</text></view>
+    </view>
+    <view class="order-tag">
+      <text class="tag tag-orange" wx:if="{{type === 'annual'}}">全年48场 · 每周六开展</text>
+      <text class="tag tag-green" wx:if="{{type === 'annual'}}">参加一次即激活</text>
+      <text class="tag tag-green" wx:if="{{type === 'trial'}}">单次体验 · 满意再办年卡</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="form-title">报名信息</view>
+
+    <view class="form-item">
+      <text class="form-label">姓名</text>
+      <input class="form-input" placeholder="请输入家长姓名" value="{{name}}" data-field="name" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">手机号</text>
+      <input class="form-input" type="number" maxlength="11" placeholder="请输入手机号" value="{{phone}}" data-field="phone" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">身份证</text>
+      <input class="form-input" placeholder="选填，仅用于投保团险" value="{{idcard}}" data-field="idcard" bindinput="onInput" />
+    </view>
+    <view class="form-tip">身份证号仅用于购买意外团险，严格保密不外传</view>
+  </view>
+
+  <view class="card rule-card">
+    <view class="form-title">购买须知</view>
+    <view class="rule-item" wx:if="{{type === 'annual'}}">· 年卡 ¥{{price}}，全年 48 场活动，每周六开展</view>
+    <view class="rule-item" wx:if="{{type === 'annual'}}">· 首次参加活动即激活，激活后全年不再收取任何费用</view>
+    <view class="rule-item" wx:if="{{type === 'annual'}}">· 激活后因团险等费用已产生，不支持退款</view>
+    <view class="rule-item" wx:if="{{type === 'trial'}}">· 体验价 ¥{{price}}，限参加 1 次单场活动</view>
+    <view class="rule-item" wx:if="{{type === 'trial'}}">· 体验后升级年卡，享受全年 48 场活动</view>
+    <view class="rule-item">· 无二次隐形消费，没有套路</view>
+  </view>
+
+  <view class="footer safe-bottom">
+    <view class="footer-price">
+      <text>合计 </text>
+      <text class="price"><text class="price-symbol">¥</text><text class="price-num">{{price}}</text></text>
+    </view>
+    <button class="btn-main pay-btn" disabled="{{submitting}}" bindtap="submit">{{submitting ? '支付中…' : '立即支付'}}</button>
+  </view>
+</view>

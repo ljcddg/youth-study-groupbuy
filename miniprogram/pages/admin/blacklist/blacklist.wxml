@@ -1,0 +1,22 @@
+<!-- 管理端 · 黑名单 -->
+<view class="page">
+
+  <view class="empty" wx:if="{{!loading && !list.length}}">
+    <view class="empty-icon">🚫</view>
+    <view class="empty-text">暂无黑名单\n驳回成团申请时可选择同时拉黑</view>
+  </view>
+
+  <view class="card first-card" wx:for="{{list}}" wx:key="_id">
+    <view class="row-between">
+      <view class="flex1">
+        <view class="li-title">{{item.name || '未填写姓名'}}</view>
+        <view class="li-sub mono">{{item.openid}}</view>
+        <view class="li-sub" wx:if="{{item.phone}}">手机号 {{item.phone}}</view>
+        <view class="li-sub" wx:if="{{item.reason}}">拉黑原因：{{item.reason}}</view>
+        <view class="li-sub">操作人 {{item.byName || '-'}} · {{item.createdAtText}}</view>
+      </view>
+    </view>
+    <button class="btn-main btn-sm mt24" bindtap="restore" data-id="{{item._id}}" data-name="{{item.name}}">恢复（移出黑名单）</button>
+  </view>
+
+</view>

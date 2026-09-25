@@ -1,0 +1,63 @@
+<!-- 我的拼团（团长） -->
+<view class="page">
+
+  <view class="empty" wx:if="{{!loading && !list.length}}">
+    <view class="empty-icon">📋</view>
+    <view class="empty-text">你还没有创建拼团\n提交「我要成团」申请，审核通过后系统会自动为你建团</view>
+    <button class="btn-main mt32" style="width:360rpx;margin:32rpx auto 0" bindtap="goApply">去申请成团</button>
+  </view>
+
+  <block wx:if="{{list.length}}">
+    <view class="note-box" style="margin:24rpx">
+      共 {{list.length}} 个拼团，每次建团都需管理员审批。
+    </view>
+
+    <view class="card" wx:for="{{list}}" wx:key="_id">
+      <view class="row-between" bindtap="goGroup" data-id="{{item._id}}">
+        <view class="flex1">
+          <view class="g-title ellipsis">{{item.name}}</view>
+          <view class="t-hint mt8">{{item.groupNo}} · 创建于 {{item.createdAtText}}</view>
+        </view>
+        <view class="st {{item.statusClass}}">{{item.statusLabel}}</view>
+      </view>
+
+      <view class="divider"></view>
+
+      <view class="stat-grid">
+        <view class="stat"><view class="stat-num">{{item.joinedCount}}</view><view class="stat-label">成员人数</view></view>
+        <view class="stat"><view class="stat-num">{{item.confirmedCount}}</view><view class="stat-label">已支付</view></view>
+        <view class="stat"><view class="stat-num">{{item.unpaidCount}}</view><view class="stat-label">未支付</view></view>
+      </view>
+
+      <view class="btn-row mt24">
+        <button class="btn-main btn-sm" bindtap="goGroup" data-id="{{item._id}}">📊 进入</button>
+        <button class="btn-ghost btn-sm" wx:if="{{item.status === 'ongoing'}}" bindtap="openEdit" data-id="{{item._id}}">✏️ 编辑</button>
+        <button class="btn-danger btn-sm" wx:if="{{item.status === 'ongoing'}}" bindtap="closeGroup" data-id="{{item._id}}">⛔ 关闭</button>
+      </view>
+    </view>
+
+    <view class="tip-foot">
+      提示：在拼团详情页点「分享给好友」，分享链接会自动带上你的标识，方便记录是谁带来的成员。
+    </view>
+  </block>
+
+  <!-- 编辑弹窗 -->
+  <view class="mask" wx:if="{{editShow}}" bindtap="closeEdit">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">编辑拼团信息</view>
+      <view class="form-item">
+        <view class="form-label form-label-req">拼团名称</view>
+        <input class="form-input" value="{{editForm.name}}" data-field="name" bindinput="onEditInput" />
+      </view>
+      <view class="t-hint mt8">套餐由成员自己选择（年票 ¥698 / 次票 ¥99），团长不参与定价。</view>
+      <view class="form-col">
+        <view class="form-label" style="width:auto">拼团说明</view>
+        <textarea class="form-textarea" value="{{editForm.desc}}" data-field="desc" bindinput="onEditInput" maxlength="500" />
+      </view>
+      <view class="pop-ft">
+        <button class="btn-gray" bindtap="closeEdit">取消</button>
+        <button class="btn-main" bindtap="saveEdit" disabled="{{editing}}">{{editing ? '保存中…' : '保存'}}</button>
+      </view>
+    </view>
+  </view>
+</view>

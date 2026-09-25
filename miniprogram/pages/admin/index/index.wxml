@@ -1,0 +1,76 @@
+<!-- 管理端 · 工作台 -->
+<view class="page">
+
+  <!-- 无权限 -->
+  <view class="card first-card" wx:if="{{!loading && !isAdmin}}">
+    <view class="card-title">暂无管理员权限</view>
+    <view class="t-sub">当前身份：{{roleLabel}}</view>
+    <view class="divider"></view>
+    <view class="t-sub">如果你刚部署完成，请用你自己的微信打开小程序：系统会把第一个访问者自动设为超级管理员。</view>
+    <view class="t-sub mt16">也可以把你的 openid 交给超级管理员，在「业务设置与管理员 → 管理员」里添加。</view>
+    <view class="form-item mt16">
+      <view class="form-label">我的 openid</view>
+      <view class="flex1 mono ellipsis" style="text-align:right">{{myOpenid}}</view>
+    </view>
+    <button class="btn-ghost mt16" bindtap="copyOpenid">复制 openid</button>
+  </view>
+
+  <block wx:if="{{isAdmin}}">
+    <view class="card first-card dash-head">
+      <view class="row-between">
+        <view class="flex1">
+          <view class="card-title" style="margin-bottom:6rpx">管理端工作台</view>
+          <view class="t-sub">当前身份：{{roleLabel}}</view>
+        </view>
+        <view class="dash-icon">🛠</view>
+      </view>
+    </view>
+
+    <!-- 待办 -->
+    <view class="card">
+      <view class="card-title">待办</view>
+      <view class="todo-grid">
+        <view class="todo todo-warn" bindtap="go" data-url="/pages/admin/applications/applications">
+          <view class="todo-num">{{d.pendingApps}}</view>
+          <view class="todo-label">待审核申请</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 总览 -->
+    <view class="card">
+      <view class="card-title">总览</view>
+      <view class="stat-grid">
+        <view class="stat"><view class="stat-num">{{d.total}}</view><view class="stat-label">拼团总数</view></view>
+        <view class="stat"><view class="stat-num">{{d.ongoing}}</view><view class="stat-label">进行中</view></view>
+        <view class="stat"><view class="stat-num">{{d.closed}}</view><view class="stat-label">已关闭</view></view>
+        <view class="stat"><view class="stat-num">{{d.joinedCount}}</view><view class="stat-label">参与人次</view></view>
+        <view class="stat"><view class="stat-num">{{d.confirmedCount}}</view><view class="stat-label">已确认人次</view></view>
+        <view class="stat"><view class="stat-num stat-num-red">{{d.confirmedAmount}}</view><view class="stat-label">已确认收款(元)</view></view>
+      </view>
+    </view>
+
+    <!-- 功能入口 -->
+    <view class="list">
+      <view class="list-item" wx:for="{{menus}}" wx:key="name" bindtap="go" data-url="{{item.url}}">
+        <view class="row-between">
+          <view class="flex1 row">
+            <text class="menu-icon">{{item.icon}}</text>
+            <view class="flex1">
+              <view class="li-title">{{item.name}}</view>
+              <view class="li-sub">{{item.desc}}</view>
+            </view>
+          </view>
+          <view class="li-right">
+            <view class="st st-pending" wx:if="{{item.badge > 0}}">{{item.badgeText}} {{item.badge}}</view>
+            <text class="arrow-r">›</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="t-hint">本系统仅记录拼团人数与款项台账，不做自动拆分付款、不建团长/成员子账户、不执行自动打款与自动结算。</view>
+    </view>
+  </block>
+</view>

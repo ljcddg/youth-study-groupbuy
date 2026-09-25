@@ -1,0 +1,80 @@
+<!-- 我要成团 -->
+<view class="page">
+
+  <!-- 查询中：先不渲染表单，避免闪出「可以再申请一次」的错觉 -->
+  <block wx:if="{{loading && !application && !forceForm}}">
+    <view class="card first-card">
+      <view class="t-sub" style="text-align:center;padding:80rpx 0">正在查询你的成团申请…</view>
+    </view>
+  </block>
+
+  <!-- 已有申请：展示状态 -->
+  <block wx:elif="{{application && !forceForm}}">
+    <view class="card first-card">
+      <view class="row-between">
+        <view class="card-title" style="margin-bottom:0">我的成团申请</view>
+        <view class="st {{statusClass}}">{{statusLabel}}</view>
+      </view>
+      <view class="divider"></view>
+      <view class="form-item"><view class="form-label">拼团名称</view><view class="flex1 t-strong" style="text-align:right">{{application.groupName}}</view></view>
+      <view class="form-item"><view class="form-label">申请人</view><view class="flex1" style="text-align:right">{{application.name}} · {{application.phone}}</view></view>
+      <view class="form-item" wx:if="{{application.targetCount}}"><view class="form-label">目标人数</view><view class="flex1" style="text-align:right">{{application.targetCount}} 人</view></view>
+      <view class="form-col" wx:if="{{application.desc}}">
+        <view class="form-label" style="width:auto">拼团说明</view>
+        <view class="t-sub mt8">{{application.desc}}</view>
+      </view>
+      <view class="form-item"><view class="form-label">提交时间</view><view class="flex1 t-sub" style="text-align:right">{{application.createdAtText}}</view></view>
+      <view class="form-item" wx:if="{{application.reviewedAtText}}"><view class="form-label">审核时间</view><view class="flex1 t-sub" style="text-align:right">{{application.reviewedAtText}}</view></view>
+      <view class="form-col" wx:if="{{application.reviewRemark}}">
+        <view class="form-label" style="width:auto">审核意见</view>
+        <view class="{{application.status === 'rejected' ? 'danger-box' : 'note-box'}} mt16">{{application.reviewRemark}}</view>
+      </view>
+    </view>
+
+    <!-- 待审核 -->
+    <view class="card" wx:if="{{application.status === 'pending'}}">
+      <view class="warn-box">你的成团申请正在等待管理员审批，请耐心等待。审批通过后系统会自动为你创建拼团。</view>
+      <button class="btn-gray mt24" bindtap="cancelApply">撤回申请，重新填写</button>
+    </view>
+
+    <!-- 已通过 -->
+    <view class="card" wx:if="{{application.status === 'approved'}}">
+      <view class="note-box">审核已通过，你已成为该拼团的团长。可以把拼团分享给其他人，邀请他们参与。</view>
+      <button class="btn-main mt24" bindtap="goMyGroups">去我的拼团</button>
+      <button class="btn-ghost mt16" bindtap="goGroup" wx:if="{{application.groupId}}">查看拼团详情</button>
+    </view>
+
+    <!-- 已驳回 / 已撤回 -->
+    <view class="card" wx:if="{{application.status === 'rejected' || application.status === 'cancelled'}}">
+      <view class="note-box">可以修改信息后重新提交申请。</view>
+      <button class="btn-main mt24" bindtap="goReapply" data-ok="1">重新填写申请</button>
+    </view>
+  </block>
+
+  <!-- 无申请：表单 -->
+  <block wx:else>
+    <view class="card first-card">
+      <view class="note-box" wx:if="{{alreadyLeader}}" style="margin-bottom:24rpx">你已是团长，可继续创建新的拼团。</view>
+      <view class="card-title">填写成团信息</view>
+      <view class="t-sub">填写姓名和手机号即可，提交后由管理员审批，通过即自动创建拼团。</view>
+      <view class="divider"></view>
+
+      <view class="form-item">
+        <view class="form-label form-label-req">姓名</view>
+        <input class="form-input" placeholder="请填写真实姓名" placeholder-class="form-ph" value="{{form.name}}" data-field="name" bindinput="onInput" />
+      </view>
+      <view class="form-item">
+        <view class="form-label form-label-req">手机号</view>
+        <input class="form-input" type="number" maxlength="11" placeholder="便于管理员联系" placeholder-class="form-ph" value="{{form.phone}}" data-field="phone" bindinput="onInput" />
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="t-hint">拼团名称、说明等会在建团成功后由你（团长）在拼团详情里设置。一个团长可创建多个拼团，每次建团都需管理员审批。收款由管理员统一负责，系统不做自动分账。</view>
+    </view>
+
+    <view class="footer-bar safe-bottom">
+      <button class="btn-main" bindtap="submit" disabled="{{submitting}}">{{submitting ? '提交中…' : '提交成团申请'}}</button>
+    </view>
+  </block>
+</view>

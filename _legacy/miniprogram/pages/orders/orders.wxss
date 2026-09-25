@@ -1,0 +1,13 @@
+.page { padding: 24rpx 0; }
+
+.empty { text-align: center; color: #BBB; font-size: 26rpx; padding: 120rpx 0; }
+.empty-icon { font-size: 80rpx; margin-bottom: 20rpx; }
+.empty-btn { width: 320rpx; margin-top: 32rpx; }
+
+.order-top { display: flex; justify-content: space-between; align-items: center; }
+.order-name { font-size: 30rpx; font-weight: 600; }
+.order-status { font-size: 24rpx; }
+.order-status.paid { color: var(--accent); }
+.order-status.unpaid { color: #999; }
+.order-info { font-size: 24rpx; color: var(--text-sub); margin-top: 12rpx; }
+.order-price { font-size: 32rpx; font-weight: 700; color: var(--price); margin-top: 12rpx; }

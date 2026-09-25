@@ -1,0 +1,227 @@
+<!-- 拼团详情 -->
+<view class="page page-with-footer">
+
+  <view class="empty" wx:if="{{notFound}}">
+    <view class="empty-icon">🔍</view>
+    <view class="empty-text">拼团不存在或已被删除\n请向分享人确认链接是否正确</view>
+  </view>
+
+  <block wx:if="{{group}}">
+
+    <!-- 头部信息 -->
+    <view class="card first-card head-card">
+      <view class="row-between">
+        <view class="flex1">
+          <view class="g-name">{{group.name}}</view>
+          <view class="t-hint mt8">编号 {{group.groupNo}}</view>
+        </view>
+        <view class="st {{group.statusClass}}">{{group.statusLabel}}</view>
+      </view>
+
+      <view class="row-between mt32">
+        <view class="flex1">
+          <view class="t-sub">团长</view>
+          <view class="g-leader">{{group.leaderName}}</view>
+        </view>
+        <view class="plan-price">
+          <view class="plan-price-item" wx:for="{{plans}}" wx:key="key">
+            <text class="t-sub">{{item.name}}</text>
+            <text class="price-num">¥{{item.price}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="progress-wrap mt24" wx:if="{{group.targetCount > 0}}">
+        <view class="row-between">
+          <text class="t-sub">已参与 {{joinedCount}} 人</text>
+          <text class="t-sub">目标 {{group.targetCount}} 人</text>
+        </view>
+        <view class="progress-bar"><view class="progress-in" style="width:{{progress}}%"></view></view>
+      </view>
+      <view class="t-sub mt16" wx:else>已参与 {{joinedCount}} 人</view>
+
+      <view class="divider" wx:if="{{group.desc}}"></view>
+      <view class="t-sub" wx:if="{{group.desc}}">{{group.desc}}</view>
+    </view>
+
+    <!-- 谁报名了（公开名单，制造从众感） -->
+    <view class="card" wx:if="{{joiners.length}}">
+      <view class="row-between">
+        <view class="card-title" style="margin-bottom:0">已报名 {{joiners.length}} 人</view>
+        <view class="t-hint">真实名单</view>
+      </view>
+      <view class="joiner-list mt16">
+        <view class="joiner-item" wx:for="{{joiners}}" wx:key="index">
+          <view class="joiner-avatar">{{item.name.slice(0,1)}}</view>
+          <view class="flex1">
+            <view class="joiner-name">{{item.name}}<text class="joiner-me" wx:if="{{item.isMe}}">（我）</text></view>
+            <view class="joiner-sub">{{item.joinedAtText}} 报名</view>
+          </view>
+        </view>
+      </view>
+      <view class="t-hint mt16" wx:if="{{joinedCount > joiners.length}}">…还有更多成员已报名</view>
+    </view>
+
+    <!-- 我的参与状态 -->
+    <view class="card" wx:if="{{mine.length}}">
+      <view class="card-title">我的参与</view>
+      <view class="mine-item" wx:for="{{mine}}" wx:key="_id">
+        <view class="row-between">
+          <view class="flex1">
+            <view class="t-strong">{{item.planName || '套餐'}} · 应付 ¥{{item.amountText}}</view>
+            <view class="t-sub mt8">{{item.sourceLabel}} · {{item.createdAtText}}</view>
+          </view>
+          <view class="st {{item.payStatusClass}}">{{item.payStatusLabel}}</view>
+        </view>
+        <view class="danger-box mt16" wx:if="{{item.payStatus === 'rejected'}}">驳回原因：{{item.rejectReason || '付款异常'}}</view>
+        <view class="note-box mt16" wx:if="{{item.payStatus === 'pending'}}">付款确认中，请稍候。</view>
+        <view class="btn-row mt24" wx:if="{{item.payStatus !== 'confirmed' && item.payStatus !== 'cancelled'}}">
+          <button class="btn-main" bindtap="goPay" data-id="{{item._id}}">
+            {{item.payStatus === 'unpaid' ? '去付款' : '重新支付'}}
+          </button>
+          <button class="btn-gray" wx:if="{{item.payStatus !== 'pending'}}" bindtap="cancelJoin" data-id="{{item._id}}">取消参与</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 团长 / 管理员：统计 -->
+    <view class="card" wx:if="{{stats}}">
+      <view class="row-between">
+        <view class="card-title" style="margin-bottom:0">{{isLeader ? '我的拼团统计' : '拼团统计'}}</view>
+        <view class="t-hint">内部台账 · 不对普通成员开放</view>
+      </view>
+      <view class="divider"></view>
+      <view class="stat-grid">
+        <view class="stat"><view class="stat-num">{{stats.joinedCount}}</view><view class="stat-label">参与人数</view></view>
+        <view class="stat"><view class="stat-num">{{stats.confirmedCount}}</view><view class="stat-label">已确认人数</view></view>
+        <view class="stat"><view class="stat-num">{{stats.pendingCount}}</view><view class="stat-label">待确认</view></view>
+        <view class="stat"><view class="stat-num">{{stats.unpaidCount}}</view><view class="stat-label">未付款</view></view>
+        <view class="stat"><view class="stat-num">{{stats.rejectedCount}}</view><view class="stat-label">已驳回</view></view>
+        <view class="stat"><view class="stat-num">{{stats.cancelledCount}}</view><view class="stat-label">已取消</view></view>
+      </view>
+      <view class="divider"></view>
+      <view class="form-item"><view class="form-label">已确认收款</view><view class="flex1 money" style="text-align:right">¥{{stats.confirmedAmountText}}</view></view>
+    </view>
+
+    <!-- 团长 / 管理员：成员台账（拉客记录） -->
+    <view class="card" wx:if="{{stats}}">
+      <view class="row-between">
+        <view class="card-title" style="margin-bottom:0">已支付成员 · 共 {{members.length}} 条</view>
+      </view>
+      <view class="t-hint mt8">记录谁在什么时候参与、由谁邀请、付款到哪一步</view>
+      <view class="empty" wx:if="{{!members.length}}">
+        <view class="empty-text">还没有成员参与\n把拼团分享出去，邀请大家加入</view>
+      </view>
+      <view class="m-row" wx:for="{{members}}" wx:key="_id" bindtap="showMember" data-id="{{item._id}}">
+        <view class="flex1">
+          <view class="row">
+            <text class="t-strong">{{item.name}}</text>
+            <text class="t-sub" style="margin-left:12rpx">{{item.phone}}</text>
+          </view>
+          <view class="li-sub">{{item.sourceLabel}} · {{item.createdAtText}}</view>
+        </view>
+        <view class="li-right">
+          <view class="st {{item.payStatusClass}}">{{item.payStatusLabel}}</view>
+          <view class="t-sub mt8">{{item.planName}} ¥{{item.amountText}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 团长操作 -->
+    <view class="card" wx:if="{{isLeader}}">
+      <view class="card-title">团长操作</view>
+      <view class="t-hint">审核通过后你已成为团长。</view>
+      <view class="btn-row mt24" wx:if="{{group.status === 'ongoing'}}">
+        <button class="btn-ghost" bindtap="openEdit">✏️ 编辑信息</button>
+        <button class="btn-danger" bindtap="closeGroup">⛔ 关闭拼团</button>
+      </view>
+    </view>
+
+  </block>
+
+  <!-- 底部操作栏 -->
+  <view class="footer-bar safe-bottom" wx:if="{{group}}">
+    <view class="btn-row">
+      <button class="btn-ghost" open-type="share">分享给好友</button>
+      <button class="btn-main" bindtap="openJoin" wx:if="{{group.status === 'ongoing'}}">
+        {{mine.length && mine[0].payStatus !== 'cancelled' ? '查看我的付款' : '我要参与'}}
+      </button>
+      <button class="btn-gray" wx:else disabled>该拼团已{{group.statusLabel}}</button>
+    </view>
+  </view>
+
+  <!-- 参与弹窗 -->
+  <view class="mask" wx:if="{{joinShow}}" bindtap="closeJoin">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">参与拼团</view>
+      <view class="form-item">
+        <view class="form-label form-label-req">姓名</view>
+        <input class="form-input" placeholder="请填写姓名" placeholder-class="form-ph" value="{{joinForm.name}}" data-field="name" bindinput="onJoinInput" />
+      </view>
+      <view class="form-item">
+        <view class="form-label form-label-req">手机号</view>
+        <input class="form-input" type="number" maxlength="11" placeholder="便于团长联系" placeholder-class="form-ph" value="{{joinForm.phone}}" data-field="phone" bindinput="onJoinInput" />
+      </view>
+      <view class="form-col">
+        <view class="form-label form-label-req" style="width:auto">选择套餐</view>
+        <view class="plan-list">
+          <view class="plan-item {{joinForm.planKey === item.key ? 'on' : ''}}" wx:for="{{plans}}" wx:key="key" data-key="{{item.key}}" bindtap="choosePlan">
+            <view class="row-between">
+              <view>
+                <text class="t-strong">{{item.name}}</text>
+                <text class="t-sub" style="margin-left:12rpx">{{item.title}}</text>
+              </view>
+              <text class="price-num">¥{{item.price}}</text>
+            </view>
+            <view class="t-hint mt8">{{item.desc}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="form-col">
+        <view class="form-label" style="width:auto">备注</view>
+        <input class="form-input-left mt8" placeholder="选填，例如孩子姓名/班级" placeholder-class="form-ph" value="{{joinForm.remark}}" data-field="remark" bindinput="onJoinInput" />
+      </view>
+      <view class="t-hint mt16">提交后会进入付款页，用微信支付完成付款，支付成功后自动确认。</view>
+      <view class="pop-ft">
+        <button class="btn-gray" bindtap="closeJoin">取消</button>
+        <button class="btn-main" bindtap="confirmJoin" disabled="{{joining}}">{{joining ? '提交中…' : '确认参与'}}</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 团长编辑弹窗 -->
+  <view class="mask" wx:if="{{editShow}}" bindtap="closeEdit">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">编辑拼团信息</view>
+      <view class="form-item">
+        <view class="form-label form-label-req">拼团名称</view>
+        <input class="form-input" value="{{editForm.name}}" data-field="name" bindinput="onEditInput" />
+      </view>
+      <view class="t-hint mt8">套餐价格由成员自己选择（年票 ¥698 / 次票 ¥99），团长不参与定价，这里只维护拼团名称与说明。</view>
+      <view class="form-col">
+        <view class="form-label" style="width:auto">拼团说明</view>
+        <textarea class="form-textarea" value="{{editForm.desc}}" data-field="desc" bindinput="onEditInput" maxlength="500" />
+      </view>
+      <view class="pop-ft">
+        <button class="btn-gray" bindtap="closeEdit">取消</button>
+        <button class="btn-main" bindtap="saveEdit" disabled="{{editing}}">{{editing ? '保存中…' : '保存'}}</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成员详情弹窗 -->
+  <view class="mask" wx:if="{{memberShow}}" bindtap="closeMember">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">成员详情</view>
+      <view class="form-item"><view class="form-label">姓名</view><view class="flex1" style="text-align:right">{{curMember.name}}</view></view>
+      <view class="form-item"><view class="form-label">手机号</view><view class="flex1" style="text-align:right">{{curMember.phone}}</view></view>
+      <view class="form-item"><view class="form-label">套餐</view><view class="flex1" style="text-align:right">{{curMember.planName || '—'}}</view></view>
+      <view class="form-item"><view class="form-label">应付金额</view><view class="flex1 money" style="text-align:right">¥{{curMember.amountText}}</view></view>
+      <view class="form-item"><view class="form-label">付款状态</view><view class="flex1" style="text-align:right"><text class="st {{curMember.payStatusClass}}">{{curMember.payStatusLabel}}</text></view></view>
+      <view class="form-item"><view class="form-label">来源</view><view class="flex1" style="text-align:right">{{curMember.sourceLabel}}</view></view>
+      <view class="form-item"><view class="form-label">参与时间</view><view class="flex1 t-sub" style="text-align:right">{{curMember.createdAtText}}</view></view>
+      <view class="form-col" wx:if="{{curMember.remark}}"><view class="form-label" style="width:auto">备注</view><view class="t-sub mt8">{{curMember.remark}}</view></view>
+      <view class="pop-ft"><button class="btn-main" bindtap="closeMember">关闭</button></view>
+    </view>
+  </view>
+</view>

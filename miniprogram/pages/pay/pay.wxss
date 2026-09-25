@@ -1,0 +1,12 @@
+/* 付款页 */
+.pay-amount-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0 8rpx;
+}
+
+.voucher-wrap { position: relative; }
+.voucher-img { width: 100%; border-radius: 16rpx; background: #F5F5F5; }
+.voucher-actions { display: flex; gap: 32rpx; padding-top: 16rpx; }
+.voucher-btn { font-size: 24rpx; color: var(--main); }

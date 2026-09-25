@@ -1,0 +1,9 @@
+{
+  "name": "ptApi",
+  "version": "1.0.0",
+  "description": "拼团小程序 — 用户端/团长端业务接口",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

@@ -1,0 +1,32 @@
+/* 我的参与 */
+.tabs {
+  display: flex;
+  background: #fff;
+  margin-bottom: 20rpx;
+  padding: 0 12rpx;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1rpx solid var(--line);
+}
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 26rpx 0;
+  font-size: 26rpx;
+  color: var(--text-sub);
+  position: relative;
+}
+.tab-on { color: var(--main-deep); font-weight: 600; }
+.tab-on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 6rpx;
+  transform: translateX(-50%);
+  width: 44rpx;
+  height: 6rpx;
+  background: var(--main);
+  border-radius: 4rpx;
+}
+.tab-num { font-size: 20rpx; margin-left: 4rpx; }

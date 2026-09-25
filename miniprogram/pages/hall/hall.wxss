@@ -1,0 +1,46 @@
+/* 团长大厅 */
+.head { padding: 36rpx 40rpx 8rpx; text-align: center; }
+.head-title { font-size: 42rpx; font-weight: 700; color: var(--main-deep); letter-spacing: 2rpx; }
+.head-sub { font-size: 24rpx; color: var(--text-sub); margin-top: 12rpx; line-height: 1.7; }
+
+.search-row { display: flex; align-items: center; padding: 24rpx 24rpx 8rpx; }
+.search-input { flex: 1; background: #fff; border-radius: 40rpx; padding: 18rpx 28rpx; font-size: 26rpx; }
+.search-btn { font-size: 26rpx; color: var(--main-deep); margin-left: 20rpx; flex-shrink: 0; }
+.search-clear { font-size: 24rpx; color: var(--text-sub); margin-left: 16rpx; flex-shrink: 0; }
+
+.tabs { display: flex; background: #fff; padding: 0 12rpx; border-bottom: 1rpx solid var(--line); }
+.tab { flex: 1; text-align: center; padding: 24rpx 0; font-size: 26rpx; color: var(--text-sub); position: relative; }
+.tab-on { color: var(--main-deep); font-weight: 600; }
+.tab-on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 6rpx;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 6rpx;
+  background: var(--main);
+  border-radius: 4rpx;
+}
+
+.count-line { font-size: 24rpx; color: var(--text-sub); padding: 22rpx 28rpx 4rpx; }
+
+.hall-card { margin-top: 20rpx; }
+.h-name { font-size: 34rpx; font-weight: 700; }
+
+.h-meta { display: flex; margin-top: 24rpx; }
+.h-meta-item { flex: 1; display: flex; flex-direction: column; gap: 6rpx; }
+
+.h-tags { margin-top: 20rpx; }
+
+.h-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 22rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid var(--line);
+}
+.h-enter { font-size: 26rpx; color: var(--main); font-weight: 600; }
+
+.foot-tip { text-align: center; font-size: 22rpx; color: #B4BAB6; padding: 10rpx 40rpx 20rpx; }

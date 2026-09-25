@@ -1,0 +1,68 @@
+.page { padding: 24rpx 0 60rpx; }
+
+/* 顶部切换 */
+.tabs {
+  display: flex;
+  background: #fff;
+  border-radius: 20rpx;
+  margin: 0 24rpx 24rpx;
+  padding: 8rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,.04);
+}
+.tab {
+  flex: 1;
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--text-sub);
+  padding: 16rpx 0;
+  border-radius: 14rpx;
+}
+.tab.active {
+  background: var(--main);
+  color: #fff;
+  font-weight: 600;
+}
+
+.intro-title { font-size: 32rpx; font-weight: 700; }
+.intro-sub { font-size: 24rpx; color: var(--text-sub); margin-top: 10rpx; line-height: 1.6; }
+
+/* 搜索 */
+.search-row { display: flex; align-items: center; }
+.search-input {
+  flex: 1;
+  background: #F2F5F1;
+  border-radius: 40rpx;
+  padding: 16rpx 28rpx;
+  font-size: 28rpx;
+}
+.search-btn { width: 160rpx; margin-left: 20rpx; padding: 16rpx 0; font-size: 28rpx; }
+.search-tip { font-size: 24rpx; color: var(--main-deep); margin-top: 18rpx; }
+
+.empty { font-size: 26rpx; color: var(--text-sub); text-align: center; padding: 20rpx 0; line-height: 1.7; }
+
+/* 团长列表 */
+.leader-item { display: flex; align-items: center; justify-content: space-between; }
+.leader-name { font-size: 30rpx; font-weight: 600; }
+.leader-phone { font-size: 24rpx; color: var(--text-sub); margin-top: 8rpx; }
+.join-btn { width: 150rpx; padding: 14rpx 0; font-size: 26rpx; }
+
+/* 注册表单 */
+.form-item { display: flex; align-items: center; border-bottom: 1rpx solid #EEF2EE; padding: 28rpx 0; }
+.form-label { width: 140rpx; font-size: 28rpx; color: #666; }
+.form-input { flex: 1; font-size: 28rpx; }
+.reg-btn { margin-top: 32rpx; }
+.form-tip { font-size: 22rpx; color: #ABB2AC; margin-top: 20rpx; line-height: 1.7; }
+
+/* 我的团 */
+.myteam-head { display: flex; align-items: center; justify-content: space-between; }
+.share-mini { width: 190rpx; padding: 16rpx 0; font-size: 26rpx; }
+.member-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22rpx 0;
+  border-top: 1rpx solid #F0F4F0;
+}
+.member-item:first-of-type { border-top: none; }
+.member-name { font-size: 28rpx; }
+.member-time { font-size: 22rpx; color: var(--text-sub); margin-top: 6rpx; }

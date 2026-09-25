@@ -1,0 +1,87 @@
+<!-- 管理端 · 成团申请审核 -->
+<view class="page">
+
+  <view class="tabs">
+    <view class="tab {{tab === item.key ? 'tab-on' : ''}}" wx:for="{{tabs}}" wx:key="key" bindtap="switchTab" data-key="{{item.key}}">
+      {{item.label}}<text class="tab-num" wx:if="{{counts[item.key]}}">{{counts[item.key]}}</text>
+    </view>
+  </view>
+
+  <view class="search-row">
+    <input class="search-input" placeholder="搜索申请人 / 手机号 / 拼团名称" placeholder-class="form-ph" value="{{keyword}}" bindinput="onKeyword" bindconfirm="doSearch" confirm-type="search" />
+    <text class="search-btn" bindtap="doSearch">搜索</text>
+    <text class="search-clear" wx:if="{{keyword}}" bindtap="clearSearch">清空</text>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && !list.length}}">
+    <view class="empty-icon">🖊</view>
+    <view class="empty-text">暂无申请记录</view>
+  </view>
+
+  <view class="card" wx:for="{{list}}" wx:key="_id">
+    <view class="row-top">
+      <view class="flex1">
+        <view class="li-title">{{item.groupName}}</view>
+        <view class="li-sub">申请人：{{item.name}} · {{item.phone}}</view>
+        <view class="li-sub">套餐由成员自行选择：年票 ¥698 / 次票 ¥99</view>
+      </view>
+      <view class="st {{item.statusClass}}">{{item.statusLabel}}</view>
+    </view>
+
+    <view class="t-sub mt16" wx:if="{{item.desc}}">{{item.desc}}</view>
+    <view class="warn-box mt16" wx:if="{{item.remark}}">备注：{{item.remark}}</view>
+    <view class="{{item.status === 'rejected' ? 'danger-box' : 'note-box'}} mt16" wx:if="{{item.reviewRemark}}">
+      {{item.status === 'rejected' ? '驳回原因：' : '审核意见：'}}{{item.reviewRemark}}
+    </view>
+
+    <view class="t-hint mt16">提交于 {{item.createdAtText}}{{item.reviewedAtText ? ' · 处理于 ' + item.reviewedAtText : ''}}</view>
+
+    <view class="btn-row mt24">
+      <button class="btn-gray btn-sm" bindtap="callPhone" data-phone="{{item.phone}}">拨打电话</button>
+      <button class="btn-ghost btn-sm" wx:if="{{item.groupId}}" bindtap="goGroup" data-id="{{item.groupId}}">查看拼团</button>
+      <button class="btn-main btn-sm" wx:if="{{item.status === 'pending'}}" bindtap="openReview" data-id="{{item._id}}">审核</button>
+    </view>
+  </view>
+
+  <!-- 审核弹窗 -->
+  <view class="mask" wx:if="{{show}}" bindtap="closeReview">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">审核成团申请</view>
+      <view class="t-sub" style="text-align:center">{{cur.groupName}} · {{cur.name}}</view>
+
+      <view class="mode-row mt24">
+        <view class="mode {{mode === 'approve' ? 'mode-on' : ''}}" bindtap="setMode" data-mode="approve">通过</view>
+        <view class="mode {{mode === 'reject' ? 'mode-off-on' : ''}}" bindtap="setMode" data-mode="reject">驳回</view>
+      </view>
+
+      <block wx:if="{{mode === 'approve'}}">
+        <view class="t-hint mt8">套餐价格固定（年票 ¥698 / 次票 ¥99），由成员参与时自己选择，这里不需要填写金额。</view>
+        <view class="form-col">
+          <view class="form-label" style="width:auto">审核意见（选填）</view>
+          <input class="form-input-left mt8" placeholder="例如：已电话确认" placeholder-class="form-ph" value="{{remark}}" bindinput="onRemark" />
+        </view>
+        <view class="note-box mt16">通过后系统会立即创建拼团，并给该用户团长身份。团长可编辑信息并分享邀请成员。</view>
+      </block>
+
+      <block wx:if="{{mode === 'reject'}}">
+        <view class="form-col">
+          <view class="form-label" style="width:auto">驳回原因（选填）</view>
+          <input class="form-input-left mt8" placeholder="留空将使用默认委婉提示" placeholder-class="form-ph" value="{{remark}}" bindinput="onRemark" />
+        </view>
+        <view class="warn-box mt16">驳回后用户能看到这条原因；留空则显示默认委婉提示。用户可修改信息重新提交。</view>
+        <view class="form-item mt16">
+          <view class="flex1">同时加入黑名单</view>
+          <switch checked="{{withBlacklist}}" bindchange="onBlacklistChange" color="#3BA971" />
+        </view>
+        <view class="t-hint mt8">加入黑名单后，该用户将无法再申请成为团长。</view>
+      </block>
+
+      <view class="pop-ft">
+        <button class="btn-gray" bindtap="closeReview">取消</button>
+        <button class="{{mode === 'approve' ? 'btn-main' : 'btn-danger'}}" bindtap="submitReview" disabled="{{submitting}}">
+          {{submitting ? '处理中…' : (mode === 'approve' ? '确认通过并建团' : '确认驳回')}}
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

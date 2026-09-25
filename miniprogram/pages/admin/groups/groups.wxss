@@ -1,0 +1,36 @@
+/* 管理端 · 拼团管理 */
+.tabs {
+  display: flex;
+  background: #fff;
+  padding: 0 12rpx;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1rpx solid var(--line);
+}
+.tab { flex: 1; text-align: center; padding: 26rpx 0; font-size: 26rpx; color: var(--text-sub); position: relative; }
+.tab-on { color: var(--main-deep); font-weight: 600; }
+.tab-on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 6rpx;
+  transform: translateX(-50%);
+  width: 44rpx;
+  height: 6rpx;
+  background: var(--main);
+  border-radius: 4rpx;
+}
+
+.search-row { display: flex; align-items: center; padding: 20rpx 24rpx 4rpx; }
+.search-input { flex: 1; background: #fff; border-radius: 40rpx; padding: 16rpx 28rpx; font-size: 26rpx; }
+.search-btn { font-size: 26rpx; color: var(--main-deep); margin-left: 20rpx; }
+.search-clear { font-size: 24rpx; color: var(--text-sub); margin-left: 16rpx; }
+.date-filter { display: flex; align-items: center; padding: 12rpx 24rpx 4rpx; }
+.date-box { background: #fff; border-radius: 40rpx; padding: 12rpx 24rpx; font-size: 24rpx; color: var(--text); }
+.date-sep { margin: 0 12rpx; font-size: 24rpx; color: var(--text-sub); }
+
+.m-block { padding: 26rpx 0; border-top: 1rpx solid var(--line); }
+.m-block:first-of-type { border-top: none; }
+.d-row { padding: 20rpx 0; border-top: 1rpx solid var(--line); }
+.d-row:first-of-type { border-top: none; }

@@ -1,0 +1,2 @@
+/* 管理端 · 黑名单（样式复用全局，此处仅少量差异） */
+.mono { font-family: Menlo, Consolas, monospace; word-break: break-all; }

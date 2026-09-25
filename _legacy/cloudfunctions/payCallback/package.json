@@ -1,0 +1,9 @@
+{
+  "name": "payCallback",
+  "version": "1.0.0",
+  "description": "微信支付回调：订单置为已支付，年卡订单推广佣金入账",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

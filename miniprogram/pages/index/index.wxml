@@ -1,0 +1,122 @@
+<!-- 首页：海报垂直长页（参考用户提供的界面效果） -->
+<view class="page page-with-footer">
+
+  <!-- 顶部品牌条 -->
+  <view class="topbar">
+    <view class="tb-name">{{brandName}}</view>
+    <view class="tb-sub">698元亲子研学年卡 · 全年48场 · 每周六开展</view>
+  </view>
+
+  <!-- 真实信息条（只用真实卖点） -->
+  <view class="fact-bar">
+    <view class="fact"><text class="fact-num">¥698</text><text class="fact-label">全年年卡</text></view>
+    <view class="fact"><text class="fact-num">48场</text><text class="fact-label">全年不重样</text></view>
+    <view class="fact"><text class="fact-num">每周六</text><text class="fact-label">固定开展</text></view>
+  </view>
+
+  <!-- 轮播：真实活动海报，点击可放大 -->
+  <swiper class="banner-swiper" indicator-dots indicator-color="rgba(255,255,255,.4)" indicator-active-color="#ffffff" autoplay circular interval="3600">
+    <swiper-item wx:for="{{banners}}" wx:key="img">
+      <image class="banner-img" src="{{item.img}}" mode="aspectFill" bindtap="previewPoster" data-img="{{item.poster}}" />
+    </swiper-item>
+  </swiper>
+
+  <!-- 限时抢购倒计时（截止时间由管理员在业务设置里配置，留空不展示） -->
+  <view class="flash-bar" wx:if="{{countdown}}">
+    <view class="flash-title">限时抢购</view>
+    <view class="cd-row">
+      <view class="cd-box">{{countdown.days}}</view><text class="cd-unit">天</text>
+      <view class="cd-box">{{countdown.hh}}</view><text class="cd-sep">:</text>
+      <view class="cd-box">{{countdown.mm}}</view><text class="cd-sep">:</text>
+      <view class="cd-box">{{countdown.ss}}</view>
+    </view>
+  </view>
+
+  <!-- 浏览量 + 团数人数 -->
+  <view class="stat-strip" wx:if="{{stats}}">
+    <view class="ss-left"><text class="ss-num">{{stats.viewCount}}</text><text class="ss-label">次浏览</text></view>
+    <view class="ss-right"><text class="ss-label">{{stats.ongoingGroups}} 个团</text><text class="ss-slash">/</text><text class="ss-label">{{stats.joinedCount}} 人参加</text></view>
+  </view>
+
+  <!-- 头像墙：最近参与的家长（最多 3 行） -->
+  <view class="avatar-wall" wx:if="{{stats && stats.recentAvatars.length}}">
+    <image
+      wx:for="{{stats.recentAvatars}}"
+      wx:key="index"
+      class="wall-avatar"
+      src="{{item.avatarFileID || item.avatarUrl}}"
+      mode="aspectFill"
+      lazy-load
+    />
+  </view>
+
+  <!-- 最新订单记录 -->
+  <view class="orders" wx:if="{{stats && stats.recentOrders.length}}">
+    <view class="orders-title">最新订单记录</view>
+    <view class="order-item" wx:for="{{stats.recentOrders}}" wx:key="index">
+      <image class="order-avatar" wx:if="{{item.avatarFileID}}" src="{{item.avatarFileID}}" mode="aspectFill" />
+      <view class="order-avatar order-ph" wx:else>👦</view>
+      <view class="flex1 order-mid">
+        <view class="order-name">{{item.name}}<text class="order-plan">{{item.planName}}</text></view>
+        <view class="order-time">{{item.createdAtText}}</view>
+      </view>
+      <view class="order-pay {{item.payClass}}">{{item.payText}}</view>
+    </view>
+  </view>
+
+  <!-- 所有海报垂直展示 -->
+  <view class="poster-flow">
+    <image
+      wx:for="{{posters}}"
+      wx:key="img"
+      class="poster-img"
+      src="{{item.img}}"
+      mode="widthFix"
+      lazy-load
+      bindtap="previewPoster"
+      data-img="{{item.img}}"
+    />
+  </view>
+
+  <!-- 教学理念 -->
+  <view class="card info-card">
+    <view class="card-title">教学理念</view>
+    <view class="idea-line">一、放下手机，拥抱第二课堂</view>
+    <view class="idea-line">二、开拓视野，增长见识</view>
+  </view>
+
+  <!-- 适合人群 -->
+  <view class="card info-card">
+    <view class="card-title">适合人群</view>
+    <view class="idea-line">① 3-12 岁儿童及其家长</view>
+    <view class="idea-line">② 重视素质教育的家庭</view>
+    <view class="idea-line">③ 希望孩子开拓视野的家庭</view>
+  </view>
+
+  <!-- 报名须知 -->
+  <view class="card info-card">
+    <view class="card-title">报名须知</view>
+    <view class="t-sub">全年 48 场活动，每周六开展；半天/全天、是否供餐以每周二发布的当期通知为准；首次参加活动即激活年卡，激活后（因团险等费用已产生）不支持退款。</view>
+  </view>
+
+  <view class="foot-tip">点任意海报可放大查看 · 长按可保存或转发</view>
+
+  <!-- 底部操作栏 -->
+  <view class="bar-nav safe-bottom">
+    <view class="bar-item" bindtap="goMine"><text class="bar-icon">👤</text><text>我的</text></view>
+    <view class="bar-item" catchtap="showService"><text class="bar-icon">🎧</text><text>客服</text></view>
+    <view class="bar-cta cta-join" bindtap="goHall">加入TA的团</view>
+    <view class="bar-cta cta-lead" bindtap="goApply">成为团长</view>
+  </view>
+
+  <!-- 客服弹窗 -->
+  <view class="mask" wx:if="{{serviceShow}}" bindtap="hideService">
+    <view class="pop" catchtap="noop">
+      <view class="pop-title">联系客服</view>
+      <view class="t-sub" style="text-align:center">{{contactTip || '扫码添加客服微信咨询'}}</view>
+      <image class="qr-img mt24" src="/images/service_qr.jpg" mode="aspectFit" show-menu-by-longpress style="margin:0 auto;display:block" />
+      <view class="t-hint" style="text-align:center;margin-top:16rpx">长按二维码识别添加</view>
+      <view class="pop-ft"><button class="btn-main" bindtap="hideService">关闭</button></view>
+    </view>
+  </view>
+</view>

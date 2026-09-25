@@ -1,0 +1,9 @@
+{
+  "name": "ptAdmin",
+  "version": "1.0.0",
+  "description": "拼团小程序 — 管理端业务接口",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

@@ -1,0 +1,52 @@
+/* 我的 */
+.me-head {
+  background: #23262B;
+  color: #fff;
+  padding: 44rpx 36rpx;
+  display: flex;
+  align-items: center;
+}
+.me-avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  text-align: center;
+  line-height: 96rpx;
+  font-size: 52rpx;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+.me-name { font-size: 34rpx; font-weight: 700; }
+.edit-link { font-size: 24rpx; color: rgba(255, 255, 255, 0.7); flex-shrink: 0; }
+
+.cell { display: flex; align-items: center; }
+.cell-icon { font-size: 36rpx; margin-right: 20rpx; }
+.cell-arrow { font-size: 36rpx; color: #C4CAC6; }
+
+/* openid：低调一行，点击复制 */
+.oid-line {
+  margin: 0 24rpx;
+  padding: 8rpx 4rpx;
+  display: flex;
+  align-items: baseline;
+}
+.oid-label { font-size: 22rpx; color: #C4CAC6; margin-right: 12rpx; flex-shrink: 0; }
+.oid-val {
+  font-size: 20rpx;
+  color: #C4CAC6;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+/* 资料弹窗 */
+.avatar-row { display: flex; align-items: center; }
+.avatar-big {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: #F2F4F2;
+  margin-right: 28rpx;
+  flex-shrink: 0;
+}
+.avatar-ph { text-align: center; line-height: 120rpx; font-size: 60rpx; }

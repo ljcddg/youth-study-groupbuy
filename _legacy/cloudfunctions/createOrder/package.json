@@ -1,0 +1,9 @@
+{
+  "name": "createOrder",
+  "version": "1.0.0",
+  "description": "下单/配置/推广绑定多功能入口",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

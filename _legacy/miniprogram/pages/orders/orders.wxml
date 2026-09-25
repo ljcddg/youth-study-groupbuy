@@ -1,0 +1,19 @@
+<!-- 我的订单 -->
+<view class="page">
+  <view wx:if="{{loading}}" class="empty">加载中…</view>
+  <view wx:elif="{{orders.length === 0}}" class="empty">
+    <view class="empty-icon">🗒️</view>
+    <view>还没有订单</view>
+    <button class="btn-main empty-btn" bindtap="goHome">去看看年卡</button>
+  </view>
+
+  <view class="card order" wx:for="{{orders}}" wx:key="index">
+    <view class="order-top">
+      <text class="order-name">{{item.title}}</text>
+      <text class="order-status {{item.paid ? 'paid' : 'unpaid'}}">{{item.paid ? '已支付' : '待支付'}}</text>
+    </view>
+    <view class="order-info">下单时间：{{item.time}}</view>
+    <view class="order-info" wx:if="{{item.activatedAt}}">激活时间：{{item.activatedAt}}（首次参加活动即激活）</view>
+    <view class="order-price">¥{{item.amount}}</view>
+  </view>
+</view>

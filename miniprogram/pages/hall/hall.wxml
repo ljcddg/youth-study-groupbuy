@@ -1,0 +1,72 @@
+<!-- 团长大厅 -->
+<view class="page page-with-footer">
+
+  <view class="head">
+    <view class="head-title">团长大厅</view>
+    <view class="head-sub">这里的拼团都已通过管理员审核。可以直接搜索，也可以点进去参与。</view>
+  </view>
+
+  <view class="search-row">
+    <input class="search-input" placeholder="搜索拼团名称 / 团长姓名 / 团长手机号 / 拼团编号" placeholder-class="form-ph" value="{{keyword}}" bindinput="onKeyword" bindconfirm="doSearch" confirm-type="search" />
+    <text class="search-btn" bindtap="doSearch">搜索</text>
+    <text class="search-clear" wx:if="{{keyword}}" bindtap="clearSearch">清空</text>
+  </view>
+
+  <view class="tabs">
+    <view class="tab {{tab === item.key ? 'tab-on' : ''}}" wx:for="{{tabs}}" wx:key="key" bindtap="switchTab" data-key="{{item.key}}">{{item.label}}</view>
+  </view>
+
+  <view class="count-line" wx:if="{{!loading}}">
+    共 {{total}} 个拼团，其中 {{ongoingCount}} 个进行中
+  </view>
+
+  <view class="empty" wx:if="{{!loading && !list.length}}">
+    <view class="empty-icon">🏕</view>
+    <view class="empty-text">没有找到符合条件的拼团\n换个关键词试试，或者自己申请成团</view>
+  </view>
+
+  <view class="card hall-card" wx:for="{{list}}" wx:key="_id" bindtap="goGroup" data-id="{{item._id}}">
+    <view class="row-top">
+      <view class="flex1">
+        <view class="h-name ellipsis">{{item.name}}</view>
+        <view class="t-hint mt8">编号 {{item.groupNo}}</view>
+      </view>
+      <view class="st {{item.statusClass}}">{{item.statusLabel}}</view>
+    </view>
+
+    <view class="h-meta">
+      <view class="h-meta-item">
+        <text class="t-hint">团长</text>
+        <text class="t-strong">{{item.leaderName}}</text>
+      </view>
+      <view class="h-meta-item">
+        <text class="t-hint">已参与</text>
+        <text class="t-strong">{{item.joinedCount}} 人</text>
+      </view>
+      <view class="h-meta-item">
+        <text class="t-hint">每份</text>
+        <text class="t-strong">{{planBrief}}</text>
+      </view>
+    </view>
+
+    <view class="h-tags">
+      <text class="tag tag-green" wx:if="{{item.isMine}}">我是团长</text>
+      <text class="tag tag-blue" wx:if="{{item.myJoined && !item.isMine}}">我已参与</text>
+      <text class="tag tag-gray" wx:if="{{item.status !== 'ongoing'}}">已结束，不可再参与</text>
+    </view>
+
+    <view class="h-foot">
+      <text class="t-hint">建团于 {{item.createdAtText}}</text>
+      <text class="h-enter">{{item.status === 'ongoing' ? '进入参与 ›' : '查看详情 ›'}}</text>
+    </view>
+  </view>
+
+  <view class="foot-tip" wx:if="{{list.length}}">点任意拼团进入详情，即可查看信息并参与</view>
+
+  <view class="footer-bar safe-bottom">
+    <view class="btn-row">
+      <button class="btn-ghost" open-type="share">分享大厅</button>
+      <button class="btn-main" bindtap="goApply">我要成团</button>
+    </view>
+  </view>
+</view>
